@@ -2,8 +2,6 @@
 
 PyDashie is a port of [Dashing](https://github.com/Shopify/dashing>) by [Shopify](http://www.shopify.com/>) to Python 2.7.
 
-![Alt text](/path/to/img.jpg)
-
 ##Getting Started
 
 You'll need the following native dependencies:

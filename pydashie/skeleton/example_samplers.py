@@ -1,4 +1,4 @@
-from dashie_sampler import DashieSampler
+from pydashie.dashie_sampler import DashieSampler
 
 import random
 import collections

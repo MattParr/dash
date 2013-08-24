@@ -1,7 +1,8 @@
 import os
 from flask import Flask, render_template, Response, send_from_directory, request, current_app
+import glob
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.getcwd(), 'templates'))
 
 @app.route("/")
 def main():
@@ -11,64 +12,46 @@ def main():
 def javascripts():
     if not hasattr(current_app, 'javascripts'):
         import coffeescript
-        scripts = [
-            'assets/javascripts/jquery.js',
-            'assets/javascripts/es5-shim.js',
-            'assets/javascripts/d3.v2.min.js',
 
-            'assets/javascripts/batman.js',
-            'assets/javascripts/batman.jquery.js',
-
-            'assets/javascripts/jquery.gridster.js',
-            'assets/javascripts/jquery.leanModal.min.js',
-
-            #'assets/javascripts/dashing.coffee',
-            'assets/javascripts/dashing.gridster.coffee',
-
-            'assets/javascripts/jquery.knob.js',
-            'assets/javascripts/rickshaw.min.js',
-            #'assets/javascripts/application.coffee',
-            'assets/javascripts/app.js',
-            #'widgets/clock/clock.coffee',
-            'widgets/number/number.coffee',
+        ordered_script_names = [
+            'jquery.js',
+            'es5-shim.js',
+            'd3.v2.min.js',
+            'batman.js',
+            'batman.jquery.js',
+            'jquery.gridster.js',
+            'jquery.leanModal.min.js',
+            'dashing.gridster.coffee',
+            'jquery.knob.js',
+            'rickshaw.min.js'
         ]
-        nizzle = True
-        if not nizzle:
-            scripts = ['assets/javascripts/application.js']
+
+        scripts = [os.path.join(os.path.dirname(os.path.abspath(__file__)), 'javascripts', js) for js in ordered_script_names]
+        for ext in ['js', 'coffee']: scripts.extend(glob.glob(os.path.join(os.getcwd(), "assets/**/*.%s") % ext))
+        for ext in ['js', 'coffee']: scripts.extend(glob.glob(os.path.join(os.getcwd(), "widgets/**/*.%s") % ext))
 
         output = []
         for path in scripts:
             output.append('// JS: %s\n' % path)
             if '.coffee' in path:
                 print('Compiling Coffee for %s ' % path)
-                contents = coffeescript.compile_file(path)
+                contents = coffeescript.compile_file(path).encode('ascii','ignore')
             else:
+                print('Reading JS for %s ' % path)
                 f = open(path)
                 contents = f.read()
                 f.close()
 
             output.append(contents)
 
-        if nizzle:
-            f = open('/tmp/foo.js', 'w')
-            for o in output:
-                print >> f, o
-            f.close()
-
-            f = open('/tmp/foo.js', 'rb')
-            output = f.read()
-            f.close()
-            current_app.javascripts = output
-        else:
-            current_app.javascripts = ''.join(output)
-        
+        current_app.javascripts = "\n".join(output)
 
     return Response(current_app.javascripts, mimetype='application/javascript')
 
 @app.route('/assets/application.css')
 def application_css():
     scripts = [
-        'assets/stylesheets/application.css',
+        os.path.join(os.getcwd(), 'assets/stylesheets/application.css'),
     ]
     output = ''
     for path in scripts:
@@ -77,13 +60,13 @@ def application_css():
 
 @app.route('/assets/images/<path:filename>')
 def send_static_img(filename):
-    directory = os.path.join('assets', 'images')
+    directory = os.path.join(os.getcwd(), 'assets', 'images')
     return send_from_directory(directory, filename)
 
 @app.route('/views/<widget_name>.html')
 def widget_html(widget_name):
     html = '%s.html' % widget_name
-    path = os.path.join('widgets', widget_name, html)
+    path = os.path.join(os.getcwd(), 'widgets', widget_name, html)
     if os.path.isfile(path):
         f = open(path)
         contents = f.read()
@@ -120,21 +103,8 @@ def pop_queue(current_event_queue):
     while True:
         data = current_event_queue.get()
         yield data
-        
-def purge_streams():
-    big_queues = [port for port, queue in xyzzy.events_queue if len(queue) > xyzzy.MAX_QUEUE_LENGTH]
-    for big_queue in big_queues:
-        current_app.logger.info('Client %s is stale. Disconnecting. Total Clients: %s' %
-                                (big_queue, len(xyzzy.events_queue)))
-        del queue[big_queue]
-        
+
 def close_stream(*args, **kwargs):
     event_stream_port = args[2][1]
     del xyzzy.events_queue[event_stream_port]
     print('Client %s disconnected. Total Clients: %s' % (event_stream_port, len(xyzzy.events_queue)))
-
-if __name__ == "__main__":
-    import SocketServer
-    SocketServer.BaseServer.handle_error = close_stream
-    import example_app
-    example_app.run(app, xyzzy)

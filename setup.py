@@ -5,7 +5,7 @@ setup(
     version='0.2dev',
     packages=['pydashie',],
     license='MIT',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
     scripts=['bin/pydashie'],
     install_requires=[
         'flask',

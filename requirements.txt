@@ -2,3 +2,4 @@ flask>=0.9
 CoffeeScript
 requests
 compago
+pyScss

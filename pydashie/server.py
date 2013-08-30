@@ -50,13 +50,25 @@ def javascripts():
 
 @app.route('/assets/application.css')
 def application_css():
-    scripts = [
-        os.path.join(os.getcwd(), 'assets/stylesheets/application.css'),
-    ]
-    output = ''
-    for path in scripts:
-        output = output + open(path).read()
-    return Response(output, mimetype='text/css')
+    from scss import Scss
+    parser = Scss()
+
+    stylesheets = []
+    for ext in ['css', 'scss']: stylesheets.extend(glob.glob(os.path.join(os.getcwd(), "assets/**/*.%s") % ext))
+    for ext in ['css', 'scss']: stylesheets.extend(glob.glob(os.path.join(os.getcwd(), "widgets/**/*.%s") % ext))
+
+    output = []
+    for path in stylesheets:
+        if '.scss' in path:
+            contents = parser.compile(scss_file=path)
+        else:
+            f = open(path)
+            contents = f.read()
+            f.close()
+
+        output.append(contents)
+
+    return Response("\n".join(output), mimetype='text/css')
 
 @app.route('/assets/images/<path:filename>')
 def send_static_img(filename):

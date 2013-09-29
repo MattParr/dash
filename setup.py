@@ -1,6 +1,6 @@
-from setuptools import setup
-from glob import glob
 import os
+from setuptools import setup
+
 
 def files_in(package, directory):
     paths = []
@@ -8,6 +8,7 @@ def files_in(package, directory):
         for f in files:
             paths.append(os.path.join(root, f)[(len(package)+1):])
     return paths
+
 
 additional_files = []
 additional_files.extend(files_in('pydashie', 'skeleton'))

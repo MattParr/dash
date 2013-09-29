@@ -1,6 +1,7 @@
+from repeated_timer import RepeatedTimer
 import datetime
 import json
-from repeated_timer import RepeatedTimer
+
 
 class DashieSampler:
     def __init__(self, app, interval):
@@ -11,21 +12,24 @@ class DashieSampler:
         self._timer.stop()
 
     def name(self):
-        '''
+        """
         Child class implements this function
-        '''
-        return 'UnknownSampler'
+
+        """
+        return "UnknownSampler"
 
     def sample(self):
-        '''
+        """
         Child class implements this function
-        '''
+
+        """
         return {}
 
     def _send_event(self, widget_id, body):
-        body['id'] = widget_id
-        body['updateAt'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S +0000')
-        formatted_json = 'data: %s\n\n' % (json.dumps(body))
+        body["id"] = widget_id
+        body["updateAt"] = \
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S +0000")
+        formatted_json = "data: %s\n\n" % (json.dumps(body))
         self._app.last_events[widget_id] = formatted_json
         for event_queue in self._app.events_queue.values():
             event_queue.put(formatted_json)

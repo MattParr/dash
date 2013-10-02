@@ -11,10 +11,10 @@ app = compago.Application()
 
 @app.command
 def new(name):
-  """Sets up ALL THE THINGS needed for your dashboard project."""
-  shutil.copytree(
-      os.path.dirname(os.path.abspath(__file__)) + "/skeleton", name
-  )
+    """Sets up ALL THE THINGS needed for your dashboard project."""
+    shutil.copytree(
+        os.path.dirname(os.path.abspath(__file__)) + "/skeleton", name
+    )
 
 
 @app.command

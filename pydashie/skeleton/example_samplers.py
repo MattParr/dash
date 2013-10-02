@@ -1,7 +1,8 @@
-from pydashie.dashie_sampler import DashieSampler
-
 import random
 import collections
+
+from pydashie.dashie_sampler import DashieSampler
+
 
 class SynergySampler(DashieSampler):
     def __init__(self, *args, **kwargs):
@@ -12,27 +13,37 @@ class SynergySampler(DashieSampler):
         return 'synergy'
 
     def sample(self):
-        s = {'value': random.randint(0, 100),
-             'current': random.randint(0, 100),
-             'last': self._last}
-        self._last = s['current']
-        return s
+        sample_info = {
+            'value': random.randint(0, 100),
+            'current': random.randint(0, 100),
+            'last': self._last,
+        }
+        self._last = sample_info['current']
+        return sample_info
+
 
 class BuzzwordsSampler(DashieSampler):
     def name(self):
         return 'buzzwords'
 
     def sample(self):
-        my_little_pony_names = ['Rainbow Dash',
-                                'Blossomforth',
-                                'Derpy',
-                                'Fluttershy',
-                                'Lofty',
-                                'Scootaloo',
-                                'Skydancer']
-        items = [{'label': pony_name, 'value': random.randint(0, 20)} for pony_name in my_little_pony_names]
+        computer_names = [
+            'The Machines',
+            'MARAX',
+            'EPICAC',
+            'Mark V',
+            'Mima',
+        ]
+        items = [
+            {
+                'label': computer_name,
+                'value': random.randint(0, 20),
+            }
+            for computer_name in computer_names
+        ]
         random.shuffle(items)
-        return {'items':items}
+        return {'items': items}
+
 
 class ConvergenceSampler(DashieSampler):
     def name(self):

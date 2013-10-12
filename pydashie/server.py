@@ -12,6 +12,7 @@ import glob
 
 from pydashie import app
 from pydashie import xyzzy
+from pydashie import PYDASHIE_APP_NAME
 
 
 @app.route("/")
@@ -46,11 +47,11 @@ def javascripts():
             scripts.append(script_filename)
         for ext in ["js", "coffee"]:
             scripts.extend(
-                glob.glob(os.path.join(os.getcwd(), "assets/**/*.%s") % ext)
+                glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "assets/**/*.%s") % ext)
             )
         for ext in ["js", "coffee"]:
             scripts.extend(
-                glob.glob(os.path.join(os.getcwd(), "widgets/**/*.%s") % ext)
+                glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "widgets/**/*.%s") % ext)
             )
 
         output = []
@@ -80,11 +81,11 @@ def application_css():
     stylesheets = []
     for ext in ["css", "scss"]:
         stylesheets.extend(
-            glob.glob(os.path.join(os.getcwd(), "assets/**/*.%s") % ext)
+            glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "assets/**/*.%s") % ext)
         )
     for ext in ["css", "scss"]:
         stylesheets.extend(
-            glob.glob(os.path.join(os.getcwd(), "widgets/**/*.%s") % ext)
+            glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "widgets/**/*.%s") % ext)
         )
 
     output = []
@@ -103,14 +104,14 @@ def application_css():
 
 @app.route("/assets/images/<path:filename>")
 def send_static_img(filename):
-    directory = os.path.join(os.getcwd(), "assets", "images")
+    directory = os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "assets", "images")
     return send_from_directory(directory, filename)
 
 
 @app.route("/views/<widget_name>.html")
 def widget_html(widget_name):
     html = "%s.html" % widget_name
-    path = os.path.join(os.getcwd(), "widgets", widget_name, html)
+    path = os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "widgets", widget_name, html)
     if os.path.isfile(path):
         f = open(path)
         contents = f.read()

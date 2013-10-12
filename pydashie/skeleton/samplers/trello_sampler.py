@@ -1,6 +1,5 @@
 from pydashie.dashie_sampler import DashieSampler
 
-import random
 import trello
 
 class TrelloSampler(DashieSampler):

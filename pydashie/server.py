@@ -1,14 +1,14 @@
 import os
+from Queue import Queue
+from glob import glob
 
+from coffeescript import compile_file as compile_coffeescript_file
 from flask import Response
 from flask import current_app
 from flask import render_template
 from flask import request
 from flask import send_from_directory
 from scss import Scss
-import Queue
-import coffeescript
-import glob
 
 from pydashie import app
 from pydashie import xyzzy
@@ -47,11 +47,23 @@ def javascripts():
             scripts.append(script_filename)
         for ext in ["js", "coffee"]:
             scripts.extend(
-                glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "assets/**/*.%s") % ext)
+                glob(
+                    os.path.join(
+                        os.getcwd(),
+                        PYDASHIE_APP_NAME,
+                        "assets/**/*.%s"
+                    ) % ext
+                )
             )
         for ext in ["js", "coffee"]:
             scripts.extend(
-                glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "widgets/**/*.%s") % ext)
+                glob(
+                    os.path.join(
+                        os.getcwd(),
+                        PYDASHIE_APP_NAME,
+                        "widgets/**/*.%s"
+                    ) % ext
+                )
             )
 
         output = []
@@ -60,7 +72,7 @@ def javascripts():
             if ".coffee" in path:
                 print("Compiling Coffee for %s " % path)
                 contents = \
-                    coffeescript.compile_file(path).encode("ascii", "ignore")
+                    compile_coffeescript_file(path).encode("ascii", "ignore")
             else:
                 print("Reading JS for %s " % path)
                 f = open(path)
@@ -81,11 +93,23 @@ def application_css():
     stylesheets = []
     for ext in ["css", "scss"]:
         stylesheets.extend(
-            glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "assets/**/*.%s") % ext)
+            glob(
+                os.path.join(
+                    os.getcwd(),
+                    PYDASHIE_APP_NAME,
+                    "assets/**/*.%s"
+                ) % ext
+            )
         )
     for ext in ["css", "scss"]:
         stylesheets.extend(
-            glob.glob(os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "widgets/**/*.%s") % ext)
+            glob(
+                os.path.join(
+                    os.getcwd(),
+                    PYDASHIE_APP_NAME,
+                    "widgets/**/*.%s"
+                ) % ext
+            )
         )
 
     output = []
@@ -111,7 +135,13 @@ def send_static_img(filename):
 @app.route("/views/<widget_name>.html")
 def widget_html(widget_name):
     html = "%s.html" % widget_name
-    path = os.path.join(os.getcwd(), PYDASHIE_APP_NAME, "widgets", widget_name, html)
+    path = os.path.join(
+        os.getcwd(),
+        PYDASHIE_APP_NAME,
+        "widgets",
+        widget_name,
+        html
+    )
     if os.path.isfile(path):
         f = open(path)
         contents = f.read()
@@ -123,7 +153,7 @@ def widget_html(widget_name):
 def events():
     if xyzzy.using_events:
         event_stream_port = request.environ["REMOTE_PORT"]
-        current_event_queue = Queue.Queue()
+        current_event_queue = Queue()
         xyzzy.events_queue[event_stream_port] = current_event_queue
         current_app.logger.info(
             "New Client %s connected. Total Clients: %s" %

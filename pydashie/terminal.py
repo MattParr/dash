@@ -5,23 +5,23 @@ import server
 import shutil
 import sys
 
+from pydashie import PYDASHIE_APP_NAME as app_name
+
 
 app = compago.Application()
 
 
 @app.command
-def new(name):
+def new():
     """Sets up ALL THE THINGS needed for your dashboard project."""
-    name = 'pydashie_app'
     shutil.copytree(
-        os.path.dirname(os.path.abspath(__file__)) + "/skeleton", name
+        os.path.dirname(os.path.abspath(__file__)) + "/skeleton", app_name
     )
 
 
 @app.command
-def start(name):
-    name = 'pydashie_app'
+def start():
     SocketServer.BaseServer.handle_error = server.close_stream
     sys.path.append('.')
-    exec("import %s as app" % name)
+    exec("import %s as app" % app_name)
     app.run(server.app, server.xyzzy)

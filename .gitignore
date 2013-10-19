@@ -2,3 +2,6 @@
 .pydevproject.txt
 *.pyc
 *Thumbs.db
+PyDashie.egg-info/
+build/
+dist/

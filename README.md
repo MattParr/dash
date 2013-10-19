@@ -24,13 +24,15 @@ Now you can follow the same instructions with the virtualenv activated
 
 ### Create your dashboard:
 
-    pydashie new myapp
+    # This will create a directory called `pydashie_app`
+    # where your own dashboard will be.
+    pydashie new
 
-### Change directory to `myapp` and start pydashie
+### Start your dashboard:
 
-    pydashie start myapp
+    pydashie start
 
-The `example_app` comes with sample widgets & sample dashboards for you to 
+The `example_app` comes with sample widgets & sample dashboards for you to
 explore. The file structure is setup as follows:
 
   * `assets` — Images, fonts, and js/coffeescript libraries.
@@ -39,3 +41,4 @@ explore. The file structure is setup as follows:
 
 See `example_app` and `example_samplers` to see how to hook up data sources 
 to widgets.
+

@@ -23,51 +23,10 @@ def main():
 @app.route("/assets/application.js")
 def javascripts():
     if not hasattr(current_app, "javascripts"):
-
-        ordered_script_names = [
-            "jquery.js",
-            "es5-shim.js",
-            "d3.v2.min.js",
-            "batman.js",
-            "batman.jquery.js",
-            "jquery.gridster.js",
-            "jquery.leanModal.min.js",
-            "dashing.gridster.coffee",
-            "jquery.knob.js",
-            "rickshaw.min.js"
-        ]
-
-        scripts = []
-        for js in ordered_script_names:
-            script_filename = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)),
-                "javascripts",
-                js
-            )
-            scripts.append(script_filename)
-        for ext in ["js", "coffee"]:
-            scripts.extend(
-                glob(
-                    os.path.join(
-                        os.getcwd(),
-                        PYDASHIE_APP_NAME,
-                        "assets/**/*.%s"
-                    ) % ext
-                )
-            )
-        for ext in ["js", "coffee"]:
-            scripts.extend(
-                glob(
-                    os.path.join(
-                        os.getcwd(),
-                        PYDASHIE_APP_NAME,
-                        "widgets/**/*.%s"
-                    ) % ext
-                )
-            )
+        javascripts = _get_javascripts()
 
         output = []
-        for path in scripts:
+        for path in javascripts:
             output.append("// JS: %s\n" % path)
             if ".coffee" in path:
                 print("Compiling Coffee for %s " % path)
@@ -86,10 +45,72 @@ def javascripts():
     return Response(current_app.javascripts, mimetype="application/javascript")
 
 
+def _get_javascripts():
+    ordered_script_names = [
+        "jquery.js",
+        "es5-shim.js",
+        "d3.v2.min.js",
+        "batman.js",
+        "batman.jquery.js",
+        "jquery.gridster.js",
+        "jquery.leanModal.min.js",
+        "dashing.gridster.coffee",
+        "jquery.knob.js",
+        "rickshaw.min.js"
+    ]
+
+    javascripts = []
+    for js in ordered_script_names:
+        script_filename = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "javascripts",
+            js
+        )
+        javascripts.append(script_filename)
+    for ext in ["js", "coffee"]:
+        javascripts.extend(
+            glob(
+                os.path.join(
+                    os.getcwd(),
+                    PYDASHIE_APP_NAME,
+                    "assets/**/*.%s"
+                ) % ext
+            )
+        )
+    for ext in ["js", "coffee"]:
+        javascripts.extend(
+            glob(
+                os.path.join(
+                    os.getcwd(),
+                    PYDASHIE_APP_NAME,
+                    "widgets/**/*.%s"
+                ) % ext
+            )
+        )
+    return javascripts
+
+
 @app.route("/assets/application.css")
 def application_css():
     parser = Scss()
 
+    stylesheets = _get_stylesheets()
+
+    output = []
+    for path in stylesheets:
+        if ".scss" in path:
+            contents = parser.compile(scss_file=path)
+        else:
+            f = open(path)
+            contents = f.read()
+            f.close()
+
+        output.append(contents)
+
+    return Response("\n".join(output), mimetype="text/css")
+
+
+def _get_stylesheets():
     stylesheets = []
     for ext in ["css", "scss"]:
         stylesheets.extend(
@@ -111,19 +132,7 @@ def application_css():
                 ) % ext
             )
         )
-
-    output = []
-    for path in stylesheets:
-        if ".scss" in path:
-            contents = parser.compile(scss_file=path)
-        else:
-            f = open(path)
-            contents = f.read()
-            f.close()
-
-        output.append(contents)
-
-    return Response("\n".join(output), mimetype="text/css")
+    return stylesheets
 
 
 @app.route("/assets/images/<path:filename>")

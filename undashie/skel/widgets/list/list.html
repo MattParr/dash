@@ -1,18 +1,17 @@
-<h1 class="title" data-bind="title"></h1>
+<script type="html/widget" class="list-item">
+    <span class="label">{label}</span>
+    <span class="value">{value}</span>
+</script>
 
-<ol>
-  <li data-foreach-item="items">
-    <span class="label" data-bind="item.label"></span>
-    <span class="value" data-bind="item.value"></span>
-  </li>
-</ol>
+<script type="html/widget" class="list">
+<h1 class="title">{title}</h1>
 
 <ul class="list-nostyle">
-  <li data-foreach-item="items">
-    <span class="label" data-bind="item.label"></span>
-    <span class="value" data-bind="item.value"></span>
+  <li>
+  {items}
   </li>
 </ul>
 
-<p class="more-info" data-bind="moreinfo"></p>
-<p class="updated-at" data-bind="updatedAtMessage"></p>
+<p class="more-info">{moreinfo}</p>
+<p class="updated-at">{updatedat}</p>
+</script>

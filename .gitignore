@@ -3,3 +3,6 @@
 *.pyc
 *Thumbs.db
 .DS_Store
+PyDashie.egg-info/
+build/
+dist/

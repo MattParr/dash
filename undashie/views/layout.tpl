@@ -8,11 +8,13 @@
 
   <title>{{title}}</title>
 
-  <!-- The javascript and css are managed by sprockets. The files can be found in the /assets folder-->
-  <script type="text/javascript" src="js/bundle.js"></script>
-  <link rel="stylesheet" href="css/bundle.css">
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.gridster.min.js"></script>
+    <script type="text/javascript" src="js/riot.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
   <link rel="stylesheet" href="css/jquery.gridster.css">
   <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="stylesheet" href="css/main.css">
 
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
   <link rel="icon" href="/assets/images/favicon.ico">

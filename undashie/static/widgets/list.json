@@ -1,0 +1,16 @@
+{
+	"widgets": [
+		{
+			"kind": "clock",
+			"id":    "myclock"
+		}, 
+		{
+			"kind": "image", 
+			"id":    "kitten",
+			"data": {
+				"url": "http://placekitten.com/g/200/300",
+				"width": 200
+			}
+		}
+	]
+}

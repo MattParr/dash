@@ -1,8 +1,10 @@
 {
 	"widgets": [
 		{
-			"kind": "clock",
-			"id":    "myclock"
+			"kind":  "clock",
+			"id":    "myclock",
+            "sizex": 1,
+            "sizey": 1
 		}, 
 		{
 			"kind": "image", 
@@ -10,7 +12,9 @@
 			"data": {
 				"url": "http://placekitten.com/g/200/300",
 				"width": 200
-			}
+			},
+            "sizex": 1,
+            "sizey": 2
 		}
 	]
 }

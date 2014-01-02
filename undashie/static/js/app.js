@@ -25,34 +25,41 @@ function Dashboard() {
 
   console.log("Started.");
 
-  var templates = {};
+  var templates = {}, grid;
 
-  dash = window.dashboard = new Dashboard();
+  dashboard = new Dashboard();
 
-  root = $('.gridster');
   $(document).ready(function(){
-    root.width(dash.contentWidth);
-    $('.gridster ul').gridster({
-      widget_margins: dash.widget_margins,
-      widget_base_dimensions: dash.widget_base_dimensions,
+    $('#container .gridster').width(dashboard.contentWidth);
+    grid = $('#container .gridster ul').gridster({
+      widget_margins: dashboard.widget_margins,
+      widget_base_dimensions: dashboard.widget_base_dimensions,
       avoid_overlapped_widgets: true
-    });
+    }).data('gridster');
     console.log("Gridster set.");    
   });
 
-
-  dash.on("add", function(item) {
+  dashboard.on("add", function(item) {
     if(!(item.kind in templates)) {
       /* Load templates,styles and behavior */
       $('head').append('<link rel="stylesheet" type="text/css" href="widgets/' + item.kind + '.css">');
       $.get('widgets/' + item.kind + '.html', function(data) {
         templates[item.kind] = data;
+        console.log("Going for script");
         $.getScript('widgets/' + item.kind + '.js', function() {
           console.log("Loaded " + item.kind);
-          self.trigger("init", item);
+          dashboard.trigger("loaded", item);
         })
       })
     }
   });
+
+  dashboard.on("loaded", function(item) {
+    el = grid.add_widget('<li>' + templates[item.kind] + '</li>', item.sizex, item.sizey);
+    el.addClass('widget-' + item.kind);
+    $("#container .gridster ul").append(el);
+    widget = window[item.kind + '_widget'](el, item, templates[item.kind]);
+    console.log(widget);
+  })
 
 }).call(this);

@@ -1,43 +1,41 @@
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+function clock_model() {
+    var self = $.observable(this);
 
-  Dashboard.Clock = (function(_super) {
-
-    __extends(Clock, _super);
-
-    function Clock() {
-      this.startTime = __bind(this.startTime, this);
-      return Clock.__super__.constructor.apply(this, arguments);
-    }
-
-    Clock.prototype.ready = function() {
-      return setInterval(this.startTime, 500);
+    self.updateTime = function() {
+        var h, m, s, today;
+        today = new Date();
+        h = today.getHours();
+        m = today.getMinutes();
+        s = today.getSeconds();
+        m = self.formatTime(m);
+        s = self.formatTime(s);
+        self.date = today.toDateString();
+        self.time =  h + ":" + m + ":" + s;
+        self.trigger("update", self); 
     };
 
-    Clock.prototype.startTime = function() {
-      var h, m, s, today;
-      today = new Date();
-      h = today.getHours();
-      m = today.getMinutes();
-      s = today.getSeconds();
-      m = this.formatTime(m);
-      s = this.formatTime(s);
-      this.set('time', h + ":" + m + ":" + s);
-      return this.set('date', today.toDateString());
+    self.formatTime = function(i) {
+        if (i < 10) {
+            return "0" + i;
+        } else {
+            return i;
+        }
     };
 
-    Clock.prototype.formatTime = function(i) {
-      if (i < 10) {
-        return "0" + i;
-      } else {
-        return i;
-      }
-    };
+    setInterval(self.updateTime, 1000);
+    return self;
+}
 
-    return Clock;
+function clock_widget(el, data, template) {
+    console.log(el);
+    model = new clock_model();
 
-  })(Dashboard.Widget);
+    model.on("init", function() {
+      model.updateTime();
+    });
 
-}).call(this);
+    model.on("update", function(item) {
+        $(el).html($.render(template, item));
+    });
+    return model;
+}

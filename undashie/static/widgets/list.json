@@ -7,18 +7,9 @@
             "sizey": 1
 		}, 
 		{
-			"kind":  "clock",
-			"id":    "myclock2",
-            "sizex": 1,
-            "sizey": 1
-		}, 
-		{
 			"kind": "image", 
 			"id":    "kitten",
-			"data": {
-				"url": "http://placekitten.com/g/200/300",
-				"width": 200
-			},
+			"url": "http://placekitten.com/g/200/300",
             "sizex": 1,
             "sizey": 2
 		}

@@ -1,21 +1,23 @@
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+function image_model(data) {
+    var self = $.observable(this);
 
-  Dashboard.Image = (function(_super) {
+    console.log(data);
+    self.url = data.url;
+    return self;
+}
 
-    __extends(Image, _super);
 
-    function Image() {
-      return Image.__super__.constructor.apply(this, arguments);
-    }
+function image_widget(el, data, template) {
+    model = new image_model(data);
 
-    Image.prototype.ready = function() {};
+    model.on("init", function(item) {
+        $(el).html($.render(template, model));
+    });
 
-    Image.prototype.onData = function(data) {};
+    model.on("update", function(item) {
+        $(el).html($.render(template, model));
+    });
 
-    return Image;
-
-  })(Dashboard.Widget);
-
-}).call(this);
+    /* return the model, which is the important bit */
+    return model;
+}

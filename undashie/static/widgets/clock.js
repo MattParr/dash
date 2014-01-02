@@ -26,8 +26,8 @@ function clock_model() {
     return self;
 }
 
+
 function clock_widget(el, data, template) {
-    console.log(el);
     model = new clock_model();
 
     model.on("init", function() {
@@ -37,5 +37,7 @@ function clock_widget(el, data, template) {
     model.on("update", function(item) {
         $(el).html($.render(template, item));
     });
+
+    /* return the model, which is the important bit */
     return model;
 }

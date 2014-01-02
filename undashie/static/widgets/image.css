@@ -1,3 +1,14 @@
 .widget-image {
   background-color: #4b4b4b;
 }
+
+.widget-image div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.widget-image > img {
+	margin: auto;
+}

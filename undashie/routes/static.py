@@ -13,7 +13,7 @@ log = logging.getLogger()
 @route('/')
 @view('layout')
 def index():
-    return {"title": "test"}
+    return {"title": "Dashboard"}
     pass
 
 @route('<filepath:path>')

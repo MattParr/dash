@@ -1,3 +1,5 @@
+"use strict";
+
 /* Model */
 function Dashboard() {
     var self = $.observable(this);
@@ -23,9 +25,8 @@ function Dashboard() {
 
     console.log("Started.");
 
-    var templates = {}, grid;
-
-    dashboard = new Dashboard();
+    var templates = {}, grid, 
+        dashboard = new Dashboard();
 
     $(document).ready(function(){
         $('.gridster').width(dashboard.contentWidth);
@@ -57,7 +58,7 @@ function Dashboard() {
             el = grid.add_widget('<li>' + templates[item.kind] + '</li>', sizex, sizey);
         el.addClass('widget-' + item.kind);
          /* inject the template and pass it on to the widget */
-        widget = window[item.kind + '_widget'](el, $.extend(item, {template: templates[item.kind]}));
+        var widget = window[item.kind + '_widget'](el, $.extend(item, {template: templates[item.kind]}));
         dashboard.widgets.push(widget);
     })
 

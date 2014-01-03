@@ -1,3 +1,5 @@
+"use strict";
+
 function image_model(data) {
     var self = $.observable($.extend(this,data));
 

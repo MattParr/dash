@@ -1,3 +1,5 @@
+"use strict";
+
 function meter_model(data) {
     var self = $.observable($.extend(this,data));
 
@@ -12,7 +14,7 @@ function meter_widget(el, data) {
     model.on("init", function() {
         requestAnimationFrame(function(){
             $(el).html($.render(model.template, model));
-            meter = $(el).find('.meter');
+            var meter = $(el).find('.meter');
             meter.val(model.value);
             console.log(meter);
             meter.attr("data-bgcolor", meter.css("background-color"))
@@ -21,7 +23,7 @@ function meter_widget(el, data) {
         });
     });
 
-    model.on("update", function(item) {
+    model.on("update", function(item){
         console.log("update");
         $(el).html($.render(model.template, model));
     });

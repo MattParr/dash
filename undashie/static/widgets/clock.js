@@ -1,3 +1,5 @@
+"use strict";
+
 function clock_model(data) {
     var self = $.observable($.extend(this, data));
 

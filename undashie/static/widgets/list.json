@@ -7,16 +7,17 @@
 		{
 			"kind": "image", 
 			"id":    "kitten",
-            "subscribe": "kittens",
+            "subscribe": "kitten-photos",
 			"url": "http://placekitten.com/g/200/300",
             "sizey": 2
 		},
         {
             "kind": "meter",
             "id": "load",
-            "subscribe": "cpu-load",
-            "title": "CPU Load",
-            "value": 50
+            "subscribe": "kitten-count",
+            "title": "Kittens",
+            "value": 73,
+            "info": "Freshly juiced"
         }
 	]
 }

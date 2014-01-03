@@ -4,16 +4,14 @@ function Dashboard() {
 
     self.widgets = [];
     self.widget_margins = [5, 5];
-    self.widget_base_dimensions = [220, 220];
+    self.widget_base_dimensions = [220, 240];
     self.numColumns = 4;
     self.contentWidth = (self.widget_base_dimensions[0] + self.widget_margins[0] * 2) * self.numColumns;
 
     $.get("/widgets/list.json", function(data){
         console.log(data);
         $.each(data.widgets, function(i) {
-            item = data.widgets[i];
-            self.widgets.push(item);
-            self.trigger("add", item);
+            self.trigger("add", data.widgets[i]);
         })
         console.log(self.widgets);
     });
@@ -46,22 +44,22 @@ function Dashboard() {
                 templates[item.kind] = data;
                 console.log("Going for script");
                 $.getScript('widgets/' + item.kind + '.js', function() {
-                    console.log("Loaded " + item.kind);
                     dashboard.trigger("loaded", item);
+                    console.log("done");
                 })
             })
         }
     });
 
     dashboard.on("loaded", function(item) {
-        sizex = item.sizex || 1;
-        sizey = item.sizey || 1;
-        el = grid.add_widget('<li>' + templates[item.kind] + '</li>', sizex, sizey);
+        var sizex = (item.sizex || 1),
+            sizey = (item.sizey || 1),
+            el = grid.add_widget('<li>' + templates[item.kind] + '</li>', sizex, sizey);
         el.addClass('widget-' + item.kind);
          /* inject the template and pass it on to the widget */
         widget = window[item.kind + '_widget'](el, $.extend(item, {template: templates[item.kind]}));
-        widget.trigger("init");
-        console.log(widget);
+        dashboard.widgets.push(widget);
+        widget.trigger("init", widget);
     })
 
 }).call(this);

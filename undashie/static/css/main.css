@@ -166,10 +166,7 @@ h3 {
 
 .more-info {
   font-size: 15px;
-  position: absolute;
-  bottom: 32px;
-  left: 0;
-  right: 0;
+  text-align: center;
 }
 
 .updated-at {

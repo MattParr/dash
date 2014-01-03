@@ -59,7 +59,6 @@ function Dashboard() {
          /* inject the template and pass it on to the widget */
         widget = window[item.kind + '_widget'](el, $.extend(item, {template: templates[item.kind]}));
         dashboard.widgets.push(widget);
-        widget.trigger("init", widget);
     })
 
 }).call(this);

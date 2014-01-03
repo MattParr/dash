@@ -1,7 +1,6 @@
 function meter_model(data) {
     var self = $.observable($.extend(this,data));
 
-    self.trigger("update", self);
     console.log(this);
     return self;
 }
@@ -10,7 +9,7 @@ function meter_model(data) {
 function meter_widget(el, data) {
     var model = new meter_model(data);
 
-    model.on("init", function(item) {
+    model.on("init", function() {
         requestAnimationFrame(function(){
             $(el).html($.render(model.template, model));
             meter = $(el).find('.meter');
@@ -27,6 +26,7 @@ function meter_widget(el, data) {
         $(el).html($.render(model.template, model));
     });
 
+    model.trigger("init");
     /* return the model, which is the important bit */
     return model;
 }

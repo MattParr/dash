@@ -1,7 +1,6 @@
 function image_model(data) {
     var self = $.observable($.extend(this,data));
 
-    console.log(this);
     return self;
 }
 
@@ -17,6 +16,7 @@ function image_widget(el, data) {
         $(el).html($.render(model.template, model));
     });
 
+    model.trigger("init");
     /* return the model, which is the important bit */
     return model;
 }

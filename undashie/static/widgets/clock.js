@@ -38,6 +38,7 @@ function clock_widget(el, data) {
         $(el).html($.render(model.template, item));
     });
 
+    model.trigger("init");
     /* return the model, which is the important bit */
     return model;
 }

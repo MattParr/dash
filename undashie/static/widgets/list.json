@@ -2,16 +2,21 @@
 	"widgets": [
 		{
 			"kind":  "clock",
-			"id":    "myclock",
-            "sizex": 1,
-            "sizey": 1
+			"id":    "myclock"
 		}, 
 		{
 			"kind": "image", 
 			"id":    "kitten",
+            "subscribe": "kittens",
 			"url": "http://placekitten.com/g/200/300",
-            "sizex": 1,
             "sizey": 2
-		}
+		},
+        {
+            "kind": "meter",
+            "id": "load",
+            "subscribe": "cpu-load",
+            "title": "CPU Load",
+            "value": 50
+        }
 	]
 }

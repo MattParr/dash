@@ -1,5 +1,5 @@
-function clock_model() {
-    var self = $.observable(this);
+function clock_model(data) {
+    var self = $.observable($.extend(this, data));
 
     self.updateTime = function() {
         var h, m, s, today;
@@ -27,15 +27,15 @@ function clock_model() {
 }
 
 
-function clock_widget(el, data, template) {
-    model = new clock_model();
+function clock_widget(el, data) {
+    var model = new clock_model(data);
 
     model.on("init", function() {
       model.updateTime();
     });
 
     model.on("update", function(item) {
-        $(el).html($.render(template, item));
+        $(el).html($.render(model.template, item));
     });
 
     /* return the model, which is the important bit */

@@ -2,22 +2,31 @@
 	"widgets": [
 		{
 			"kind":  "clock",
-			"id":    "myclock"
+			"id"  :  "myclock"
 		}, 
 		{
-			"kind": "image", 
-			"id":    "kitten",
+			"kind"     : "image", 
+			"id"       : "kitten-pic",
             "subscribe": "kitten-photos",
-			"url": "http://placekitten.com/g/200/300",
-            "sizey": 2
+			"url"      : "http://placekitten.com/g/200/300",
+            "sizey"    : 2
 		},
         {
-            "kind": "meter",
-            "id": "load",
+            "kind"     : "meter",
+            "id"       : "kitten-gauge",
             "subscribe": "kitten-count",
-            "title": "Kittens",
-            "value": 73,
-            "info": "Freshly juiced"
+            "title"    : "Kittens",
+            "value"    : 73,
+            "info"     : "Freshly juiced"
+        },
+        {
+            "kind"     : "linechart",
+            "id"       : "kitten-trends",
+            "subscribe": "kitten-count",
+            "title"    : "Meowing",
+            "history"  : [0, 2, 24, 43, 54, 73],
+            "sizex"    : 2,
+            "sizey"    : 2
         }
 	]
 }

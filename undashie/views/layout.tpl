@@ -11,6 +11,7 @@
     <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
     <script type="text/javascript" src="js/jquery.gridster.min.js"></script>
     <script type="text/javascript" src="js/jquery.knob.js"></script>
+    <script type="text/javascript" src="js/chart.js"></script>
     <script type="text/javascript" src="js/riot.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <link rel="stylesheet" href="css/jquery.gridster.css">

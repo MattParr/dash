@@ -25,8 +25,21 @@ function Dashboard() {
 
     console.log("Started.");
 
-    var templates = {}, grid, 
-        dashboard = new Dashboard();
+    var templates = {}, grid,
+        dashboard = new Dashboard(),
+        source = new EventSource('/event')
+
+    source.addEventListener('tick', function(e) {
+        console.log(e.data);
+    }, false);
+    source.addEventListener('error', function(e) {
+        if (e.readyState == EventSource.CLOSED) {
+            document.body.innerHTML = "Server down"
+        }
+        else if( e.readyState == EventSource.OPEN) {
+            document.body.innerHTML = "Connecting..."
+        }
+    }, false);
 
     $(document).ready(function(){
         $('.gridster').width(dashboard.contentWidth);
@@ -34,7 +47,7 @@ function Dashboard() {
             widget_margins: dashboard.widget_margins,
             widget_base_dimensions: dashboard.widget_base_dimensions
         }).data('gridster');
-        console.log("Gridster set.");    
+        console.log("Gridster set.");
     });
 
     dashboard.on("add", function(item) {

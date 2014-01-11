@@ -30,8 +30,10 @@ function Dashboard() {
         source = new EventSource('/event')
 
     source.addEventListener('tick', function(e) {
-        console.log(e.data);
+        console.log(e);
     }, false);
+
+    // TODO: test error conditions
     source.addEventListener('error', function(e) {
         if (e.readyState == EventSource.CLOSED) {
             document.body.innerHTML = "Server down"

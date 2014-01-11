@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, os.path, sys, logging, uuid, datetime
+import os, os.path, sys, logging, uuid, datetime, json
 from bottle import app, request, response, route, redirect, static_file, view
 
 from utils import path_for
@@ -43,9 +43,12 @@ def event():
         'event': 'tick',
         'data' : str(datetime.datetime.now())
     }]
-    for i in range(r.llen("client:%s" % client_id))
+    events = []
+    log.debug("Queue: %d" % (r.llen("client:%s" % client_id)))
+    for i in range(r.llen("client:%s" % client_id)):
         # pop each ID from the queue and grab the corresponding data
         event_id = r.lpop("client:%s") 
+        log.debug("Got %s" % event_id)
         if not event_id:
             break
         ev = r.get(event_id)

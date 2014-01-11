@@ -7,8 +7,8 @@
         "port"        : 8000
     },
     "redis": {
-        "hostname": "localhost",
-        "port"    : 6379
+        "host": "localhost",
+        "port": 6379
     },
     "logging": {
         "version": 1,

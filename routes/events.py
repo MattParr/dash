@@ -27,11 +27,11 @@ def event():
         client_id = str(uuid.uuid4())
         response.set_cookie("client-id", client_id)
         # add this to the clients list
-        r.rpush("dash:clients", client_id)
+        r.rpush("dash:clients", "client:%s" % client_id)
         # create a new initialization event
-        r.setex("event:%s" % client_id, 5, json.dumps({"client-id": client_id}))
+        r.setex("event:%s" % client_id, 60, json.dumps({"client-id": client_id}))
         # ...and add a reference to it to a new client queue
-        r.rpush("client:%s" % client_id, "event:%s" % client_id)
+        r.rpush("client:%s" % client_id, client_id)
     # reset the queue timeout
     r.expire("client:%s" % client_id, 120)
     # TODO: remove item from dash:clients if queue expired
@@ -43,15 +43,13 @@ def event():
         'event': 'tick',
         'data' : str(datetime.datetime.now())
     }]
-    events = []
     log.debug("Queue: %d" % (r.llen("client:%s" % client_id)))
     for i in range(r.llen("client:%s" % client_id)):
         # pop each ID from the queue and grab the corresponding data
-        event_id = r.lpop("client:%s") 
-        log.debug("Got %s" % event_id)
+        event_id = r.lpop("client:%s" % client_id) 
         if not event_id:
             break
-        ev = r.get(event_id)
+        ev = r.get("event:%s" % event_id)
         if not ev:
             break
         try:
@@ -59,7 +57,7 @@ def event():
         except Exception as e:
             log.debug("Could not parse %s" % ev)
             break
-        for k in ev.keys:
+        for k in ev.keys():
             events.append({'id': event_id, 'event': k, 'data': json.dumps(ev[k])})
 
     log.debug(map(lambda x: (x,request.headers[x]),request.headers.keys()))
@@ -67,4 +65,5 @@ def event():
     buffer = ''
     for e in events:
         buffer += pack(e)
+    log.debug("Pack: %s" % buffer)
     return buffer

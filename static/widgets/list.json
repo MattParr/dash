@@ -1,8 +1,9 @@
 {
 	"widgets": [
 		{
-			"kind":  "clock",
-			"id"  :  "myclock"
+			"kind"     :  "clock",
+			"id"       :  "myclock",
+            "subscribe": "tick"
 		}, 
 		{
 			"kind"     : "image", 

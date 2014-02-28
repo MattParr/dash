@@ -29,9 +29,9 @@ def event():
         # add this to the clients list
         r.rpush("dash:clients", "client:%s" % client_id)
         # create a new initialization event
-        r.setex("event:%s" % client_id, 60, json.dumps({"client-id": client_id}))
+        r.setex("event:%s" % client_id, 60, json.dumps({'client-id': client_id}))
         # ...and add a reference to it to a new client queue
-        r.rpush("client:%s" % client_id, client_id)
+        r.rpush("client:%s" % client_id, "event:%s" % client_id)
     # reset the queue timeout
     r.expire("client:%s" % client_id, 120)
     # TODO: remove item from dash:clients if queue expired
@@ -54,13 +54,15 @@ def event():
             break
         try:
             ev = json.loads(ev)
+            log.warn(ev)
         except Exception as e:
             log.debug("Could not parse %s" % ev)
             break
         for k in ev.keys():
             events.append({'id': event_id, 'event': k, 'data': json.dumps(ev[k])})
 
-    log.debug(map(lambda x: (x,request.headers[x]),request.headers.keys()))
+    #log.debug(map(lambda x: (x,request.headers[x]),request.headers.keys()))
+    log.debug(request.headers['Cookie'])
     response.headers['content-type'] = 'text/event-stream'
     buffer = ''
     for e in events:

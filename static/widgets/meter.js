@@ -27,8 +27,7 @@ function meter_widget(el, data) {
         });
     });
 
-    model.on("update", function(item){
-        console.log("update");
+    model.on("update", function(item) {
         $(el).html($.render(model.template, model));
         var meter = $(el).find('.meter');
         meter.val(model.value);

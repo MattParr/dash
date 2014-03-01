@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/main.css">
 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,600,700' rel='stylesheet' type='text/css'>
     <link rel="icon" href="/assets/images/favicon.ico">
 </head>
 <body>

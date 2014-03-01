@@ -1,17 +1,17 @@
 "use strict";
 
 /* Model */
-function Dashboard() {
+function Dashboard(source) {
     var self = $.observable(this);
 
+    self.source = source;
     self.widgets = [];
     self.widget_margins = [5, 5];
     self.widget_base_dimensions = [220, 240];
     self.numColumns = 4;
     self.contentWidth = (self.widget_base_dimensions[0] + self.widget_margins[0] * 2) * self.numColumns;
 
-    $.get("/widgets/list.json", function(data){
-        console.log(data);
+    $.get("/widgets/config.json", function(data){
         $.each(data.widgets, function(i) {
             self.trigger("add", data.widgets[i]);
         })
@@ -26,8 +26,8 @@ function Dashboard() {
     console.log("Started.");
 
     var templates = {}, grid,
-        dashboard = new Dashboard(),
-        source = new EventSource('/event')
+        source    = new EventSource('/event'),
+        dashboard = new Dashboard(source);
 
     source.addEventListener('tick', function(e) {
         console.log(e);

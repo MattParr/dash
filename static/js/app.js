@@ -29,10 +29,6 @@ function Dashboard(source) {
         source    = new EventSource('/event'),
         dashboard = new Dashboard(source);
 
-    source.addEventListener('tick', function(e) {
-        console.log(e);
-    }, false);
-
     // TODO: test error conditions
     source.addEventListener('error', function(e) {
         if (e.readyState == EventSource.CLOSED) {
@@ -72,7 +68,7 @@ function Dashboard(source) {
             sizey = (item.sizey || 1),
             el = grid.add_widget('<li>' + templates[item.kind] + '</li>', sizex, sizey);
         el.addClass('widget-' + item.kind);
-         /* inject the template and pass it on to the widget */
+         /* inject the template and pass it on to the widget, invoking its function by name */
         var widget = window[item.kind + '_widget'](el, $.extend(item, {template: templates[item.kind]}));
         dashboard.widgets.push(widget);
     })

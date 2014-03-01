@@ -14,7 +14,6 @@ c = EventController(settings)
 
 def pack(d):
     buffer = ''
-    log.debug(d)
     for k in ['retry','id','event','data']:
         if k in d.keys():
             buffer += '%s: %s\n' % (k, d[k])
@@ -37,11 +36,10 @@ def event():
         'data' : str(datetime.datetime.now())
     })
     for e in c.get_events_for_client(client_id):
-        if e:
-            buffer += pack(e)
+        buffer += pack(e)
 
     #log.debug(map(lambda x: (x,request.headers[x]),request.headers.keys()))
     log.debug(dict(request.headers))
-    response.headers['content-type'] = 'text/event-stream'
     log.debug("Pack: %s" % buffer)
+    response.headers['content-type'] = 'text/event-stream'
     return buffer

@@ -56,15 +56,10 @@ class EventController:
             # grab the corresponding data
             buf = self.redis.get("event:%s" % event_id)
 
-            ev = None
-            if not buf:
-                break
             try:
-                ev = json.loads(buf)
-                log.warn(ev)
+                event = json.loads(buf)
+                event.update({'id': event_id})
+                yield event
             except Exception as e:
-                log.debug("Could not parse %s" % ev)
+                log.warn("Could not parse '%s' as JSON" % buf)
                 break
-
-            if ev:
-                yield ev.update({'id': event_id})

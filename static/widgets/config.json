@@ -21,6 +21,14 @@
             "info"     : "Freshly juiced"
         },
         {
+            "kind"     : "meter",
+            "id"       : "kitten-gauge2",
+            "subscribe": "kitten-count",
+            "title"    : "Moar Kittens",
+            "value"    : 73,
+            "info"     : "Freshly juiced"
+        },
+        {
             "kind"     : "linechart",
             "id"       : "kitten-trends",
             "subscribe": "kitten-count",

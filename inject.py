@@ -16,3 +16,4 @@ random.seed(time.time())
 
 for i in range(0,4):
     c.add_event('kitten-count', str(random.randint(0,70)))
+    time.sleep(10)

@@ -13,7 +13,7 @@ function Dashboard(source) {
 
     $.get("/widgets/config.json", function(data){
         $.each(data.widgets, function(i) {
-            self.trigger("add", data.widgets[i]);
+            self.trigger("add", $.extend(data.widgets[i], {'source':self.source}));
         })
         console.log(self.widgets);
     });

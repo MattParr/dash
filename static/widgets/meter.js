@@ -3,6 +3,10 @@
 function meter_model(data) {
     var self = $.observable($.extend(this,data));
 
+    self.source.addEventListener(self.subscribe, function(e) {
+        self.value = e.data;
+        self.trigger("update");
+    })
     console.log(this);
     return self;
 }
@@ -26,6 +30,11 @@ function meter_widget(el, data) {
     model.on("update", function(item){
         console.log("update");
         $(el).html($.render(model.template, model));
+        var meter = $(el).find('.meter');
+        meter.val(model.value);
+        meter.attr("data-bgcolor", meter.css("background-color"))
+             .attr("data-fgcolor", meter.css("color"))
+             .knob();
     });
 
     model.trigger("init");

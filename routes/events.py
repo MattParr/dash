@@ -6,14 +6,15 @@ from bottle import app, request, response, route, redirect, static_file, view
 
 from utils import path_for
 from config import settings
-from miniredis.client import RedisClient
+from controllers.events import EventController
 
 log = logging.getLogger()
 
-r = RedisClient(**settings.redis)
+c = EventController(settings)
 
 def pack(d):
     buffer = ''
+    log.debug(d)
     for k in ['retry','id','event','data']:
         if k in d.keys():
             buffer += '%s: %s\n' % (k, d[k])
@@ -23,49 +24,24 @@ def pack(d):
 @route('/event')
 def event():
     client_id = request.get_cookie("client-id")
-    if not client_id:
+    if not (client_id and c.client_alive(client_id)):
         client_id = str(uuid.uuid4())
         response.set_cookie("client-id", client_id)
-        # add this to the clients list
-        r.rpush("dash:clients", "client:%s" % client_id)
-        # create a new initialization event
-        r.setex("event:%s" % client_id, 60, json.dumps({'client-id': client_id}))
-        # ...and add a reference to it to a new client queue
-        r.rpush("client:%s" % client_id, "event:%s" % client_id)
-    # reset the queue timeout
-    r.expire("client:%s" % client_id, 120)
-    # TODO: remove item from dash:clients if queue expired
+        c.add_client(client_id)
 
     # now fetch all the events this client is entitled to
-    events = [{
+    buffer = pack({
         'retry': '5000',
         'id'   : uuid.uuid4(),
         'event': 'tick',
         'data' : str(datetime.datetime.now())
-    }]
-    log.debug("Queue: %d" % (r.llen("client:%s" % client_id)))
-    for i in range(r.llen("client:%s" % client_id)):
-        # pop each ID from the queue and grab the corresponding data
-        event_id = r.lpop("client:%s" % client_id) 
-        if not event_id:
-            break
-        ev = r.get("event:%s" % event_id)
-        if not ev:
-            break
-        try:
-            ev = json.loads(ev)
-            log.warn(ev)
-        except Exception as e:
-            log.debug("Could not parse %s" % ev)
-            break
-        for k in ev.keys():
-            events.append({'id': event_id, 'event': k, 'data': json.dumps(ev[k])})
+    })
+    for e in c.get_events_for_client(client_id):
+        if e:
+            buffer += pack(e)
 
     #log.debug(map(lambda x: (x,request.headers[x]),request.headers.keys()))
-    log.debug(request.headers['Cookie'])
+    log.debug(dict(request.headers))
     response.headers['content-type'] = 'text/event-stream'
-    buffer = ''
-    for e in events:
-        buffer += pack(e)
     log.debug("Pack: %s" % buffer)
     return buffer

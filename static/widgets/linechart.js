@@ -16,8 +16,8 @@ function linechart_widget(el, data) {
     });
 
     model.on("render", function() {
+        $(el).html($.render(model.template, model));
         requestAnimationFrame(function(){
-            $(el).html($.render(model.template, model));
             var ctx = $(el).find('.chart')[0].getContext("2d");
             var chart = new Chart(ctx).Line({
                 labels: Array(model.history.length+1).join(1).split('').map(function(){return '';}),
@@ -27,9 +27,13 @@ function linechart_widget(el, data) {
                     strokeColor     : "rgba(220,120,120,1)"
                 }]
             },{
-                scaleShowLabels: false,
+                scaleOverride: true,
+                scaleSteps: 10,
+                scaleStepWidth: (Math.max.apply(Math, model.history) - Math.min.apply(Math, model.history))/10,
+                scaleStartValue: (Math.min.apply(Math, model.history)),
+                scaleShowLabels: true,
                 animation      : false,
-                pointDot       : false
+                pointDot       : true 
             });
         });
     });

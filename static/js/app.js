@@ -68,8 +68,12 @@ function Dashboard(source) {
             sizey = (item.sizey || 1),
             el = grid.add_widget('<li>' + templates[item.kind] + '</li>', sizex, sizey);
         el.addClass('widget-' + item.kind);
-         /* inject the template and pass it on to the widget, invoking its function by name */
+        /* inject the template and pass it on to the widget, invoking its function by name */
         var widget = window[item.kind + '_widget'](el, $.extend(item, {template: templates[item.kind]}));
+        /* now create a closure that will update the widget when its subscribed event pops up */
+        widget.source.addEventListener(widget.subscribe, function(e) {
+            widget.trigger("update", e);
+        });
         dashboard.widgets.push(widget);
     })
 

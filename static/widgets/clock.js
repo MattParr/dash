@@ -13,7 +13,7 @@ function clock_model(data) {
         s = self.formatTime(s);
         self.date = today.toDateString();
         self.time =  h + ":" + m + ":" + s;
-        self.trigger("update", self); 
+        self.trigger("render", self); 
     };
 
     self.formatTime = function(i) {
@@ -36,8 +36,10 @@ function clock_widget(el, data) {
       model.updateTime();
     });
 
-    model.on("update", function(item) {
-        $(el).html($.render(model.template, item));
+    model.on("render", function(item) {
+        requestAnimationFrame(function(){
+            $(el).html($.render(model.template, item));
+        });
     });
 
     model.trigger("init");

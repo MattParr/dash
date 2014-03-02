@@ -12,11 +12,15 @@ function linechart_widget(el, data) {
     var model = new linechart_model(data);
 
     model.on("init", function() {
+        model.trigger("render");
+    });
+
+    model.on("render", function() {
         requestAnimationFrame(function(){
             $(el).html($.render(model.template, model));
             var ctx = $(el).find('.chart')[0].getContext("2d");
             var chart = new Chart(ctx).Line({
-                labels: Array(model.history.length).join(1).split('').map(function(){return '';}),
+                labels: Array(model.history.length+1).join(1).split('').map(function(){return '';}),
                 datasets: [{
                     data: model.history,
                     fillColor       : "rgba(220,120,120,0.5)",
@@ -30,8 +34,12 @@ function linechart_widget(el, data) {
         });
     });
 
-    model.on("update", function(item){
-        console.log("update");
+    model.on("update", function(ev){
+        model.history.push(ev.data);
+        if (model.history.length > 10) {
+            model.history.shift();
+        }
+        model.trigger("render");
     });
 
     model.trigger("init");

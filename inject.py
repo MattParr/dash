@@ -14,6 +14,6 @@ c = EventController(settings)
 
 random.seed(time.time())
 
-for i in range(0,4):
+for i in range(0,40):
     c.add_event('kitten-count', str(random.randint(0,70)))
-    time.sleep(10)
+    time.sleep(2)

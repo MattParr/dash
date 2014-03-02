@@ -30,7 +30,7 @@ def event():
 
     # now fetch all the events this client is entitled to
     buffer = pack({
-        'retry': '5000',
+        'retry': '2000',
         'id'   : uuid.uuid4(),
         'event': 'tick',
         'data' : str(datetime.datetime.now())

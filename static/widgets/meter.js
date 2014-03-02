@@ -2,14 +2,6 @@
 
 function meter_model(data) {
     var self = $.observable($.extend(this,data));
-
-    /*
-    self.source.addEventListener(self.subscribe, function(e) {
-        self.value = e.data;
-        self.trigger("update");
-    })
-    */
-    console.log(this);
     return self;
 }
 
@@ -36,6 +28,7 @@ function meter_widget(el, data) {
                 .knob();
         });
     });
+
     model.trigger("init");
     /* return the model, which is the important bit */
     return model;

@@ -12,7 +12,7 @@ log = logging.getLogger()
 
 c = EventController(settings)
 
-random.seed(time.time())
+random.seed()
 
 for i in range(0,40):
     c.add_event('kitten-count', str(random.randint(0,70)))

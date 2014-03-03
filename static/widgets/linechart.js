@@ -12,14 +12,15 @@ function linechart_widget(el, data) {
     var model = new linechart_model(data);
 
     model.on("init", function() {
+        $(el).html($.render(model.template, model));
+        model.ctx = $(el).find('.chart')[0].getContext("2d");
+        model.chart = new Chart(model.ctx);
         model.trigger("render");
     });
 
     model.on("render", function() {
-        $(el).html($.render(model.template, model));
         requestAnimationFrame(function(){
-            var ctx = $(el).find('.chart')[0].getContext("2d");
-            var chart = new Chart(ctx).Line({
+            model.chart.Line({
                 labels: Array(model.history.length+1).join(1).split('').map(function(){return '';}),
                 datasets: [{
                     data: model.history,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, sys, logging, time, uuid, datetime, json, random
+import os, sys, logging, time, uuid, datetime, json, random, itertools
 
 from miniredis.client import RedisClient
 
@@ -33,14 +33,15 @@ class EventController:
 
     def client_alive(self, client_id):
         self.redis.hset("dash:clients", client_id, time.time())
-        self.redis.expire("client:%s" % client_id, self.client_timeout)
+        return self.redis.expire("client:%s" % client_id, self.client_timeout)
 
 
     def expire_clients(self):
-        clients = self.redis.hgetall("dash:clients")
+        i = iter(self.redis.hgetall("dash:clients"))
+        clients = dict(itertools.izip(i,i))
         now = time.time()
         for k in clients.keys():
-            if clients[k] < (now - self.timeout):
+            if float(clients[k]) < (now - self.client_timeout):
                 self.redis.hdel("dash:clients", k)
                 self.redis.delete("client:%s" % k)
 

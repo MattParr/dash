@@ -102,6 +102,11 @@ class RedisServer(object):
                 self.dump(client, str(val))
         elif isinstance(o, RedisMessage):
             client.wfile.write('%s\r\n' % o)
+        elif isinstance(o, dict):
+            client.wfile.write('*' + str(len(o)*2) + nl)
+            for k in o.keys():
+                self.dump(client, str(k))
+                self.dump(client, str(o[k]))
         else:
             client.wfile.write('return type not yet implemented\r\n')
         client.wfile.flush()

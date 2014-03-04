@@ -37,7 +37,6 @@ class EventController:
 
     def expire_clients(self):
         clients = self.redis.hgetall("dash:clients")
-        log.warn(clients)
         if not clients:
             return
         i = iter(clients)
@@ -51,7 +50,6 @@ class EventController:
 
     def add_event(self, event_name, event_data):
         clients = self.redis.hgetall("dash:clients")
-        log.warn(clients)
         if not clients:
             return
         if not random.randint(0,3):
@@ -66,7 +64,6 @@ class EventController:
                          }))
         # propagate it to all clients
         clients = self.redis.hkeys("dash:clients")
-        log.warn(clients)
         if clients:
             for client_id in clients:
                 self.redis.rpush("client:%s" % client_id, event_id)

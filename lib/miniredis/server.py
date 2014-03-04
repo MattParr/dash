@@ -646,7 +646,10 @@ class RedisServer(object):
 
     def handle_hgetall(self, client, key):
         self.check_ttl(client, key)
-        return client.table[key]
+        try:
+            return client.table[key]
+        except:
+            return []
 
 
     def handle_hincrby(self, client, key, field, increment):

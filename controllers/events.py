@@ -38,7 +38,6 @@ class EventController:
     def expire_clients(self):
         i = iter(self.redis.hgetall("dash:clients"))
         clients = dict(itertools.izip(i,i))
-        log.warn(clients)
         now = time.time()
         for k in clients.keys():
             if float(clients[k]) < (now - self.client_timeout):

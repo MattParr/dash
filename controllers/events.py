@@ -32,13 +32,13 @@ class EventController:
 
 
     def client_alive(self, client_id):
-        self.redis.hset("dash:clients", client_id, time.time())
-        return self.redis.expire("client:%s" % client_id, self.client_timeout)
+        return self.redis.hexists("dash:clients", client_id)
 
 
     def expire_clients(self):
         i = iter(self.redis.hgetall("dash:clients"))
         clients = dict(itertools.izip(i,i))
+        log.warn(clients)
         now = time.time()
         for k in clients.keys():
             if float(clients[k]) < (now - self.client_timeout):
@@ -64,7 +64,11 @@ class EventController:
 
 
     def get_events_for_client(self, client_id):
-        for i in xrange(self.redis.llen("client:%s" % client_id)):
+        count = self.redis.llen("client:%s" % client_id)
+        if not count:
+            return
+
+        for i in xrange(count):
 
             # pop each ID from the queue
             event_id = self.redis.lpop("client:%s" % client_id) 

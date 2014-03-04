@@ -23,8 +23,12 @@ def pack(d):
 @route('/event')
 def event():
     client_id = request.get_cookie("client-id")
-    if not (client_id and c.client_alive(client_id)):
+    try:
+        client_id = str(uuid.UUID(client_id, version=4))
+    except ValueError: # invalid UUID
         client_id = str(uuid.uuid4())
+
+    if not c.client_alive(client_id):
         response.set_cookie("client-id", client_id)
         c.add_client(client_id)
 

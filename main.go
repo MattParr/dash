@@ -4,7 +4,7 @@ import (
 	"fmt"
 	eventsource "github.com/antage/eventsource/http"
 	//"github.com/bmizerany/pat"          // Sinatra-like router
-	"github.com/fiorix/go-web/autogzip" // gzip support
+	//"github.com/fiorix/go-web/autogzip" // gzip support
 	//"github.com/hoisie/mustache"  Mustache-like templating engine
 	"log"
 	"net/http"
@@ -15,6 +15,7 @@ import (
 var listenPort int = 8080
 var staticPath string = "static"
 
+
 func Source(es eventsource.EventSource) {
 	id := 1
 	for {
@@ -24,8 +25,8 @@ func Source(es eventsource.EventSource) {
 	}
 }
 
-func main() {
 
+func main() {
 	es := eventsource.New(nil, nil)
 	defer es.Close()
 
@@ -33,8 +34,8 @@ func main() {
 	go Source(es)
 
 	// Serve static files
-	http.Handle("/", autogzip.Handle(http.FileServer(http.Dir(staticPath))))
-
+	// http.Handle("/", autogzip.Handle(http.FileServer(http.Dir(staticPath))))
+	http.Handle("/", http.FileServer(http.Dir(staticPath)))
 
 	err := http.ListenAndServe(fmt.Sprintf(":%d", listenPort), nil)
 	if err != nil {

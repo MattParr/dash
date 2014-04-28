@@ -1,37 +1,26 @@
 package main
 
 import (
-	"github.com/bmizerany/pat"   // Sinatra-like router
-	"github.com/hoisie/mustache" // Mustache-like templating engine
-	"io"
+	"fmt"
+	"github.com/bmizerany/pat" // Sinatra-like router
+	//"github.com/hoisie/mustache"  Mustache-like templating engine
 	"log"
 	"net/http"
-	"path/filepath"
 )
 
 var listenPort int = 8080
-var staticPath string = "static"
-var mimeTypes = map[string]string{
-	".js":   "application/javascript",
-	".css":  "text/css",
-	".html": "text/html",
-	".jpg":  "image/jpg",
-	".gif":  "image/gif",
-}
+var staticPath string = "/static/"
 
-func StaticFiles(w http.ResponseWriter, r *http.Request) {
-	filename := string(staticPath + r.URL.Path[len(staticPath):])
-
-	contentType = mimeTypes[path.Ext(filename)]
-	if contentType {
-		w.Header().set("Content-Type", contentType)
-	}
-	http.ServeFile(w, r, filename)
+func Api(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
 	m := pat.New()
-	m.Get("/static/:file", http.HandlerFunc(StaticFiles))
+	m.Get("/api/:id", http.HandlerFunc(Api))
 	http.Handle("/", m)
-	err := http.ListenAndServe(fmt.Sprintf(":%d", listenPort))
+    http.Handle(staticPath, http.StripPrefix(staticPath, http.FileServer(http.Dir("." + staticPath))))
+	err := http.ListenAndServe(fmt.Sprintf(":%d", listenPort), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

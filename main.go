@@ -3,21 +3,18 @@ package main
 import (
 	"fmt"
 	eventsource "github.com/antage/eventsource/http"
-	"github.com/bmizerany/pat"          // Sinatra-like router
+	//"github.com/bmizerany/pat"          // Sinatra-like router
 	"github.com/fiorix/go-web/autogzip" // gzip support
 	//"github.com/hoisie/mustache"  Mustache-like templating engine
 	"log"
 	"net/http"
 	"path"
+	"strconv"
 	"time"
-    "strconv"
 )
 
 var listenPort int = 8080
 var staticPath string = "static"
-
-func Api(w http.ResponseWriter, r *http.Request) {
-}
 
 func Source(es eventsource.EventSource) {
 	id := 1
@@ -35,10 +32,6 @@ func main() {
 
 	http.Handle("/event", es)
 	go Source(es)
-
-	r := pat.New()
-	r.Get("/api/:id", http.HandlerFunc(Api))
-	http.Handle("/api", r)
 
 	// Serve static files
 	http.Handle("/static", autogzip.Handle(http.FileServer(http.Dir(staticPath))))

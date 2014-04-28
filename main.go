@@ -8,7 +8,6 @@ import (
 	//"github.com/hoisie/mustache"  Mustache-like templating engine
 	"log"
 	"net/http"
-	"path"
 	"strconv"
 	"time"
 )
@@ -34,12 +33,8 @@ func main() {
 	go Source(es)
 
 	// Serve static files
-	http.Handle("/static", autogzip.Handle(http.FileServer(http.Dir(staticPath))))
+	http.Handle("/", autogzip.Handle(http.FileServer(http.Dir(staticPath))))
 
-	// Serve site root
-	http.HandleFunc("/", autogzip.HandleFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, path.Join(staticPath, "index.html"))
-	}))
 
 	err := http.ListenAndServe(fmt.Sprintf(":%d", listenPort), nil)
 	if err != nil {

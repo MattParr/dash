@@ -7,6 +7,4 @@ However, it's now an almost (but not quite) completely different beast, save for
 
 ## Goals:
 
-1. Do the simplest thing that could possibly work in relatively standard JS
-2. Re-do it in React to get a feel for performance
-3. Do it properly in Clojure + ClojureScript + Om
+The `golang` branch aims at exploring just how fast I can make this, well... go with the smallest amount of code.
